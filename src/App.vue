@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import VizceralVue from './components/VizceralVue';
+  import VizceralVue from './components/VizceralVue/VizceralVue';
 
   const trafficSample = require('./mocks/sample.json');
   const trafficSampleSimple = require('./mocks/sample-simple.json');

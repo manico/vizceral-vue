@@ -1,6 +1,6 @@
 import { reduce, merge } from 'lodash';
 import Vizceral from 'vizceral';
-import { getPerformanceNow } from '../utility';
+import { getPerformanceNow } from '../../utility';
 
 export default {
   name: 'VizceralVue',
