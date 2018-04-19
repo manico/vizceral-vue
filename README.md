@@ -20,21 +20,19 @@ Vue.use(VizceralVue);
 Example of usage:
 
 ```js
-import Vizceral from 'vizceral-react';
-<VizceralVue
-  traffic={this.trafficData}
-  view={this.currentView}
-  showLabels={this.displayOptions.showLabels}
-  physicsOptions={this.physicsOptions}
-  filters={this.filters}
-  viewChanged={this.viewChanged}
-  objectHighlighted={this.objectHighlighted}
-  nodeContextSizeChanged={this.nodeContextSizeChanged}
-  matchesFound={this.matchesFound}
-  match={this.searchTerm}
-  modes={this.modes}
-  definitions={this.definitions}
-  styles={this.styles}
+import Vizceral from 'vizceral-vue';
+
+<vizceral-vue
+  :traffic="trafficData"
+  :view="this.currentView"
+  :showLabels="this.displayOptions.showLabels"
+  :physicsOptions="this.physicsOptions"
+  :filters="this.filters"
+  :matchesFound="this.matchesFound"
+  :match="this.searchTerm"
+  :modes="this.modes"
+  :definitions="this.definitions"
+  :styles="this.styles"
 />
 ```
 
@@ -49,19 +47,10 @@ allowDraggingOfNodes: Boolean
 
 Nodes can be repositioned through dragging if and only if this is true.
 
-#### connectionHighlighted
-
-```js
-// Default: () => {}
-connectionHighlighted: Function
-```
-
-Callback for when a connection is highlighted. The highlighted connection is the only parameter.
-
 #### definitions
 
 ```js
-// Default: {}
+// Default: ""
 definitions: Object
 ```
 
@@ -89,11 +78,11 @@ A search string to highlight nodes that match
 #### matchesFound
 
 ```js
-// Default: () => {}
+// Default: () => ""
 matchesFound: Function
 ```
 
-Callback when nodes match the match string. The matches object { total, visible } is the only property.
+Callback when nodes match the match string. The matches object " total, visible " is the only property.
 
 #### modes
 
@@ -101,40 +90,7 @@ Callback when nodes match the match string. The matches object { total, visible 
 modes: Object
 ```
 
-Map of modes to mode type, e.g. { detailedNode: 'volume' }
-
-#### nodeContextSizeChanged
-
-```js
-// Default: () => {}
-nodeContextSizeChanged: Function
-```
-
-Callback for when the top level node context panel size changes. The updated dimensions is the only parameter.
-
-#### nodeHighlighted
-
-```js
-// Default: () => {}
-nodeHighlighted: Function
-```
-
-Callback for when an object is highlighted. The highlighted object is the only parameter.
-`object.type` will be either 'node' or 'connection'
-
-#### nodeUpdated
-
-```js
-// Default: () => {}
-nodeUpdated: 
-```
-
-#### objectHighlighted
-
-```js
-// Default: () => {}
-objectHighlighted: 
-```
+Map of modes to mode type, e.g. " detailedNode: 'volume' "
 
 #### showLabels
 
@@ -148,7 +104,7 @@ Whether or not to show labels on the nodes.
 #### styles
 
 ```js
-// Default: {}
+// Default: ""
 styles: Object
 ```
 
@@ -166,7 +122,7 @@ Target framerate for rendering engine
 #### traffic
 
 ```js
-// Default: {}
+// Default: ""
 traffic: Object
 ```
 
@@ -178,21 +134,3 @@ The traffic data. See [github.com/Netflix/Vizceral/wiki/How-to-Use#graph-data-fo
 // Default: []
 view: 
 ```
-
-#### viewChanged
-
-```js
-// Default: () => {}
-viewChanged: Function
-```
-
-Callback for when the view changed. The view array is the only property.
-
-#### viewUpdated
-
-```js
-// Default: () => {}
-viewUpdated: Function
-```
-
-Callback for when the current view is updated.
