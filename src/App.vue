@@ -1,28 +1,36 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <VizceralVue :traffic="trafficSample" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+  import VizceralVue from './components/VizceralVue';
 
-export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
-}
+  const trafficSample = require('./mocks/sample.json');
+  const trafficSampleSimple = require('./mocks/sample-simple.json');
+
+  export default {
+    name: 'App',
+    components: {
+      VizceralVue,
+    },
+    data() {
+      return {
+        trafficSample,
+        trafficSampleSimple,
+      };
+    },
+  };
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  html,
+  body,
+  #app {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+  }
 </style>
