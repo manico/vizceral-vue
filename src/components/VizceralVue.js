@@ -1,15 +1,10 @@
 import { reduce, merge } from 'lodash';
 import Vizceral from 'vizceral';
+import { getPerformanceNow } from '../utility';
 
 export default {
   name: 'VizceralVue',
   props: {
-    /*
-    Callback for when a connection is highlighted. The highlighted connection is the only parameter.
-    */
-    connectionHighlighted: {
-      type: Function,
-    },
     /*
     Object map of definitions.
     */
@@ -35,29 +30,10 @@ export default {
       type: Object,
     },
     /*
-    Callback for when an object is highlighted. The highlighted object is the only parameter.
-    `object.type` will be either 'node' or 'connection'
-    */
-    objectHighlighted: {
-      type: Function,
-    },
-    /*
     Pass in an object to highlight
     */
     objectToHighlight: {
       type: Object,
-    },
-    /*
-    Callback for when the top level node context panel size changes. The updated dimensions is the only parameter.
-    */
-    nodeContextSizeChanged: {
-      type: Function,
-    },
-    /*
-    Callback when nodes match the match string. The matches object { total, visible } is the only property.
-    */
-    matchesFound: {
-      type: Function,
     },
     /*
     Whether or not to show labels on the nodes.
@@ -84,18 +60,6 @@ export default {
       type: Object,
     },
     /*
-    Callback for when the view changed. The view array is the only property.
-    */
-    viewChanged: {
-      type: Function,
-    },
-    /*
-    Callback for when the current view is updated.
-    */
-    viewUpdated: {
-      type: Function,
-    },
-    /*
     Target framerate for rendering engine.
     */
     targetFramerate: {
@@ -107,29 +71,41 @@ export default {
       vizceral: null,
       options: null,
       defaults: {
-        connectionHighlighted: () => { },
         definitions: {},
         filters: [],
         match: '',
-        nodeHighlighted: () => { },
-        nodeUpdated: () => { },
-        nodeContextSizeChanged: () => { },
-        matchesFound: () => { },
-        objectHighlighted: () => { },
-        objectHovered: () => { },
         objectToHighlight: null,
         showLabels: true,
         allowDraggingOfNodes: false,
         styles: {},
         traffic: {},
-        viewChanged: () => { },
-        viewUpdated: () => { },
         view: [],
         targetFramerate: null,
       },
     };
   },
   methods: {
+    connectionHighlighted(payload) {
+      this.$emit('connectionHighlighted', payload);
+    },
+    nodeHighlighted(payload) {
+      this.$emit('nodeHighlighted', payload);
+    },
+    nodeUpdated(payload) {
+      this.$emit('nodeUpdated', payload);
+    },
+    nodeContextSizeChanged(payload) {
+      this.$emit('nodeContextSizeChanged', payload);
+    },
+    matchesFound(payload) {
+      this.$emit('matchesFound', payload);
+    },
+    objectHighlighted(payload) {
+      this.$emit('objectHighlighted', payload);
+    },
+    objectHovered(payload) {
+      this.$emit('objectHovered', payload);
+    },
     updateStyles(styles) {
       const styleNames = this.vizceral.getStyles();
       const customStyles = reduce(styleNames, (result, styleName) => {
@@ -138,7 +114,13 @@ export default {
       }, {});
 
       this.vizceral.updateStyles(customStyles);
-    }
+    },
+    viewChanged(payload) {
+      this.$emit('viewChanged', payload);
+    },
+    viewUpdated() {
+      this.$emit('viewUpdated');
+    },
   },
   render(createElement) {
     return createElement(
@@ -174,18 +156,23 @@ export default {
     this.vizceral = new Vizceral(this.$refs.canvas, this.targetFramerate);
     this.updateStyles(this.options.styles);
 
-    this.vizceral.on('viewChanged', this.options.viewChanged);
-    this.vizceral.on('objectHighlighted', this.options.objectHighlighted);
-    this.vizceral.on('objectHovered', this.options.objectHovered);
-    this.vizceral.on('nodeUpdated', this.options.nodeUpdated);
-    this.vizceral.on('nodeContextSizeChanged', this.options.nodeContextSizeChanged);
-    this.vizceral.on('matchesFound', this.options.matchesFound);
-    this.vizceral.on('viewUpdated', this.options.viewUpdated);
+    this.vizceral.on('connectionHighlighted', this.connectionHighlighted);
+    this.vizceral.on('nodeHighlighted', this.nodeHighlighted);
+    this.vizceral.on('nodeUpdated', this.nodeUpdated);
+    this.vizceral.on('nodeContextSizeChanged', this.nodeContextSizeChanged);
+    this.vizceral.on('matchesFound', this.matchesFound);
+    this.vizceral.on('objectHighlighted', this.objectHighlighted);
+    this.vizceral.on('objectHovered', this.objectHovered);
+    this.vizceral.on('viewChanged', this.viewChanged);
+    this.vizceral.on('viewUpdated', this.viewUpdated);
 
     this.$nextTick(() => {
       this.vizceral.setView(this.options.view, this.objectToHighlight);
       this.vizceral.updateData(this.traffic);
-      this.vizceral.animate();
+
+      const performanceNow = getPerformanceNow();
+      this.vizceral.animate(performanceNow === null ? 0 : performanceNow);
+
       this.vizceral.updateBoundingRectCache();
     });
   },
