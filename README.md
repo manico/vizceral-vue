@@ -50,7 +50,7 @@ Nodes can be repositioned through dragging if and only if this is true.
 #### definitions
 
 ```js
-// Default: ""
+// Default: {}
 definitions: Object
 ```
 
@@ -73,16 +73,7 @@ Array of filter definitions and current values to filter out nodes and connectio
 match: String
 ```
 
-A search string to highlight nodes that match
-
-#### matchesFound
-
-```js
-// Default: () => ""
-matchesFound: Function
-```
-
-Callback when nodes match the match string. The matches object " total, visible " is the only property.
+A search string to highlight nodes that match.
 
 #### modes
 
@@ -90,7 +81,15 @@ Callback when nodes match the match string. The matches object " total, visible 
 modes: Object
 ```
 
-Map of modes to mode type, e.g. " detailedNode: 'volume' "
+Map of modes to mode type, e.g. `{ detailedNode: 'volume' }`.
+
+#### objectHighlight
+
+```js
+objectHighlight: Object
+```
+
+Pass in an object to highlight.
 
 #### showLabels
 
@@ -104,7 +103,7 @@ Whether or not to show labels on the nodes.
 #### styles
 
 ```js
-// Default: ""
+// Default: {}
 styles: Object
 ```
 
@@ -122,15 +121,8 @@ Target framerate for rendering engine
 #### traffic
 
 ```js
-// Default: ""
+// Default: {}
 traffic: Object
 ```
 
 The traffic data. See [github.com/Netflix/Vizceral/wiki/How-to-Use#graph-data-format](https://github.com/Netflix/Vizceral/wiki/How-to-Use#graph-data-format) for specification.
-
-#### view
-
-```js
-// Default: []
-view: 
-```
