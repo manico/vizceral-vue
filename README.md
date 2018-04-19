@@ -24,15 +24,15 @@ import Vizceral from 'vizceral-vue';
 
 <vizceral-vue
   :traffic="trafficData"
-  :view="this.currentView"
-  :showLabels="this.displayOptions.showLabels"
-  :physicsOptions="this.physicsOptions"
-  :filters="this.filters"
-  :matchesFound="this.matchesFound"
-  :match="this.searchTerm"
-  :modes="this.modes"
-  :definitions="this.definitions"
-  :styles="this.styles"
+  :view="currentView"
+  :showLabels="showLabels"
+  :physicsOptions="physicsOptions"
+  :filters="filters"
+  :matchesFound="matchesFound"
+  :match="searchTerm"
+  :modes="modes"
+  :definitions="definitions"
+  :styles="styles"
 />
 ```
 
