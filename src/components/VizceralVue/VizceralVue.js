@@ -1,4 +1,4 @@
-import { reduce, merge } from 'lodash';
+import { defaults, isEqual, reduce } from 'lodash';
 import Vizceral from 'vizceral';
 import { getPerformanceNow } from '../../utility';
 
@@ -64,6 +64,12 @@ export default {
     */
     targetFramerate: {
       type: Number,
+    },
+    /*
+    Current view.
+    */
+    view: {
+      type: Array,
     },
   },
   data() {
@@ -149,8 +155,55 @@ export default {
       ],
     );
   },
+  watch: {
+    allowDraggingOfNodes(value) {
+      this.options.allowDraggingOfNodes = value;
+      this.vizceral.setOptions({
+        allowDraggingOfNodes: value,
+      });
+    },
+    definitions(value) {
+      this.options.definitions = value;
+      this.vizceral.updateDefinitions(value);
+    },
+    filters(value) {
+      this.options.filters = value;
+      this.vizceral.setFilters(value);
+    },
+    match(value) {
+      this.options.match = value;
+      this.vizceral.findNodes(value);
+    },
+    modes(value) {
+      this.options.modes = value;
+      this.vizceral.setModes(value);
+    },
+    showLabels(value) {
+      this.options.showLabels = value;
+      this.vizceral.setOptions({
+        showLabels: value,
+      });
+    },
+    styles(value) {
+      this.options.styles = value;
+      this.updateStyles(value);
+    },
+    traffic(value, previousValue) {
+      this.options.traffic = value;
+      if (!value) this.vizceral.updateData(value);
+
+      const valueUpdated = value.updated || Date.now();
+      if (!previousValue || !previousValue.nodes || valueUpdated > (previousValue.updated || 0)) {
+        this.vizceral.updateData(value);
+      }
+    },
+    view(value) {
+      this.options.view = value;
+      this.vizceral.setView(value, this.options.objectToHighlight);
+    },
+  },
   beforeMount() {
-    this.options = merge({}, this.defaults, this.$props);
+    this.options = defaults({}, this.$props, this.defaults);
   },
   mounted() {
     this.vizceral = new Vizceral(this.$refs.canvas, this.targetFramerate);
@@ -166,14 +219,28 @@ export default {
     this.vizceral.on('viewChanged', this.viewChanged);
     this.vizceral.on('viewUpdated', this.viewUpdated);
 
+    this.vizceral.updateData(this.traffic);
+
+    this.vizceral.setOptions({
+      allowDraggingOfNodes: this.options.allowDraggingOfNodes,
+      showLabels: this.options.showLabels,
+    });
+
+    if (!isEqual(this.options.filters, this.defaults.filters)) {
+      this.vizceral.setFilters(this.options.filters);
+    }
+
+    if (!isEqual(this.options.definitions, this.defaults.definitions)) {
+      this.vizceral.updateDefinitions(this.options.definitions);
+    }
+
     this.$nextTick(() => {
-      this.vizceral.setView(this.options.view, this.objectToHighlight);
-      this.vizceral.updateData(this.traffic);
+      this.vizceral.setView(this.options.view, this.options.objectToHighlight);
 
       const performanceNow = getPerformanceNow();
       this.vizceral.animate(performanceNow === null ? 0 : performanceNow);
-
       this.vizceral.updateBoundingRectCache();
+      console.log(this.vizceral);
     });
   },
   beforeDestroy() {
