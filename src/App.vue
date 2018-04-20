@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <VizceralVue :traffic="trafficSample" />
+    <button @click="setHomeView">Home</button>
+    <VizceralVue :traffic="trafficSample"
+                 :view="currentView"
+                 :allow-dragging-of-nodes="true"
+                 @viewChanged="setView" />
   </div>
 </template>
 
@@ -19,7 +23,16 @@
       return {
         trafficSample,
         trafficSampleSimple,
+        currentView: [],
       };
+    },
+    methods: {
+      setHomeView() {
+        this.currentView = [];
+      },
+      setView(value) {
+        this.currentView = value;
+      },
     },
   };
 </script>
