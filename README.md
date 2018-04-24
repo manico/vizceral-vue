@@ -33,6 +33,13 @@ import Vizceral from 'vizceral-vue';
   :modes="modes"
   :definitions="definitions"
   :styles="styles"
+  @connectionHighlighted="onConnectionHighlighted"
+  @nodeHighlighted="onNodeHighlighted"
+  @nodeUpdated="onNodeUpdated"
+  @nodeContextSizeChanged="onNodeContextSizeChanged"
+  @matchesFound="onMatchesFound"
+  @objectHighlighted="onObjectHighlighted"
+  @objectHovered="onObjectHovered"
 />
 ```
 
@@ -54,7 +61,7 @@ Nodes can be repositioned through dragging if and only if this is true.
 definitions: Object
 ```
 
-Object map of definitions. Refer to [github.com/Netflix/Vizceral/wiki/Configuration#definitions-for-data-to-display](https://github.com/Netflix/Vizceral/wiki/Configuration#definitions-for-data-to-display)
+Object map of definitions. Refer to [github.com/Netflix/Vizceral/wiki/Configuration#definitions-for-data-to-display](https://github.com/Netflix/Vizceral/wiki/Configuration#definitions-for-data-to-display).
 
 #### filters
 
@@ -64,7 +71,7 @@ filters: Array
 ```
 
 Array of filter definitions and current values to filter out nodes and connections. Refer to
-[github.com/Netflix/Vizceral/wiki/Configuration#filters](https://github.com/Netflix/Vizceral/wiki/Configuration#filters)
+[github.com/Netflix/Vizceral/wiki/Configuration#filters](https://github.com/Netflix/Vizceral/wiki/Configuration#filters).
 
 #### match
 
@@ -126,3 +133,34 @@ traffic: Object
 ```
 
 The traffic data. See [github.com/Netflix/Vizceral/wiki/How-to-Use#graph-data-format](https://github.com/Netflix/Vizceral/wiki/How-to-Use#graph-data-format) for specification.
+
+## Events
+
+#### connectionHighlighted
+
+Event fired when a connection is highlighted. The highlighted connection is the only parameter.
+
+#### nodeHighlighted
+
+Event fired when an object is highlighted. The highlighted object is the only parameter.
+`object.type` will be either `node` or `connection`.
+
+#### nodeUpdated
+
+Event fired when a node is updated.
+
+#### nodeContextSizeChanged
+
+Event fired when the top level node context panel size changes. The updated dimensions is the only parameter.
+
+#### matchesFound
+
+Event fired when nodes match the match string. The matches object `{ total, visible }` is the only parameter.
+
+#### objectHighlighted
+
+Event fired when an object is highlighted.
+
+#### objectHovered
+
+Event fired when an object is hovered.
